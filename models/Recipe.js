@@ -12,6 +12,7 @@ const recipeSchema = new mongoose.Schema({
   instructions: String,
   
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  
 });
 
 module.exports = mongoose.model("Recipe", recipeSchema);

@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   getCategories, 
   getRecipesByCategory,
@@ -6,7 +7,9 @@ const {
   getFavoriteRecipes,
   getRecipeDetails, 
   removeFavoriteRecipe 
+
 } = require("../controllers/recipeController");
+
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();

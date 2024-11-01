@@ -2,12 +2,18 @@ const Recipe = require("../models/Recipe");
 const axios = require("axios");
 
 
+
+
 exports.getCategories = async (req, res) => {
+
   try {
+
     const response = await axios.get('https://www.themealdb.com/api/json/v1/1/categories.php');
     const categories = response.data.categories.slice(0, 5); 
     res.json(categories);
+
   } catch (error) {
+
     console.error("Error fetching categories:", error);
     res.status(500).json({ message: "Error fetching categories" });
   }
@@ -16,9 +22,12 @@ exports.getCategories = async (req, res) => {
 
 
 exports.getRecipesByCategory = async (req, res) => {
+
     const { category } = req.params;
 
     try {
+
+
         const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
         const recipes = response.data.meals; 
 
@@ -30,6 +39,7 @@ exports.getRecipesByCategory = async (req, res) => {
         res.json(recipes);
         
     } catch (error) {
+
         console.error("Error fetching recipes by category:", error);
         res.status(500).json({ message: "Error fetching recipes by category" });
     }
@@ -38,6 +48,7 @@ exports.getRecipesByCategory = async (req, res) => {
 
 
 exports.addFavoriteRecipe = async (req, res) => {
+
   const { recipeId } = req.body; 
 
   try {
@@ -47,6 +58,7 @@ exports.addFavoriteRecipe = async (req, res) => {
 
     
     if (!recipeData) {
+
       return res.status(404).json({ message: "Recipe not found in API" });
     }
 
@@ -54,7 +66,10 @@ exports.addFavoriteRecipe = async (req, res) => {
 
    
     const existingFavorite = await Recipe.findOne({ recipeId, user: req.user.id });
-    if (existingFavorite) {
+
+
+        if (existingFavorite) {
+
       return res.status(400).json({ message: "Recipe is already in favorites" });
     }
 
@@ -64,18 +79,26 @@ exports.addFavoriteRecipe = async (req, res) => {
 
  
     res.json(favorite);
+
   } catch (error) {
+
     console.error("Error adding favorite recipe:", error);
     res.status(500).json({ message: "Error adding favorite recipe" });
   }
 };
 
+
+
 exports.getFavoriteRecipes = async (req, res) => {
+
   try {
+
     console.log('Fetching favorite recipes for user:', req.user.id); 
     const favorites = await Recipe.find({ user: req.user.id });
     res.json(favorites);
+
   } catch (error) {
+
     console.error("Error fetching favorite recipes:", error);
     res.status(500).json({ message: "Error fetching favorite recipes" });
   }
@@ -83,13 +106,17 @@ exports.getFavoriteRecipes = async (req, res) => {
 
 
 exports.getRecipeDetails = async (req, res) => {
+
   const { recipeId } = req.params;
 
   try {
+
     const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`);
     const recipeDetails = response.data.meals[0]; 
     res.json(recipeDetails);
+
   } catch (error) {
+
     console.error("Error fetching recipe details:", error);
     res.status(500).json({ message: "Error fetching recipe details" });
   }
@@ -97,14 +124,18 @@ exports.getRecipeDetails = async (req, res) => {
 
 
 exports.removeFavoriteRecipe = async (req, res) => {
+
   const { recipeId } = req.params;
 
   try {
+
     const result = await Recipe.deleteOne({ recipeId, user: req.user.id });
+    
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Favorite recipe not found" });
     }
     res.json({ message: "Recipe removed from favorites" });
+
   } catch (error) {
     console.error("Error removing favorite recipe:", error);
     res.status(500).json({ message: "Error removing favorite recipe" });
