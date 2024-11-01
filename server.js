@@ -20,5 +20,5 @@ app.use("/api/recipes", recipeRoutes);
 
 
 app.listen(PORT,  () => {
-    console.log(`Server is running on port ${HOST} ${PORT}`);
+    console.log(`Server is running on port  ${PORT}`);
 });
