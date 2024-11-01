@@ -10,7 +10,7 @@ app.use(cors());
 
 
 const PORT = process.env.PORT || 5000;
-
+const HOST = '0.0.0.0';
 
 connectDB();
 
@@ -19,6 +19,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, HOST, () => {
+    console.log(`Server is running on port ${HOST} ${PORT}`);
 });
